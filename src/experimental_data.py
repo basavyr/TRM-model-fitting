@@ -21,7 +21,6 @@ ENERGY_BANDHEAD = ENERGIES_BAND1[0]
 SPIN_BANDHEAD = SPINS_BAND1[0]
 PHONON_BANDHEAD = PHONONS_BAND1[0]
 
-
 # EXCITATION ENERGIES
 # Defined as the energy for a given I state minus a reference value
 # Reference value: the band head energy for the first state within the zero-phonon band
@@ -31,6 +30,8 @@ EXCITATION_ENERGIES_KEV = [e-ENERGY_BANDHEAD for e in ENERGIES_BAND1[1:]] + \
 SPINS = np.asarray(SPINS_BAND1[1:]+SPINS_BAND2)
 PHONONS = np.asarray(PHONONS_BAND1[1:]+PHONONS_BAND2)
 EXCITATION_ENERGIES = list(map(MeV, EXCITATION_ENERGIES_KEV))
+# define the tuple of arrays which will be used within the model function that enters in the curve_fit function
+INPUT_DATA = (PHONONS, SPINS)
 
 
 def main():

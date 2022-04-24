@@ -85,3 +85,18 @@ def Excitation_Energy(n, I, I1, I2, I3):
     excitation_energy = e-e0
 
     return excitation_energy
+
+
+# create a function which evaluates the excitation energy for a triaxial rotor
+def model_energy(input_data, I1, I2, I3):
+    """
+    The `model_energy` evaluates the TRM energy for an entire set of spins and phonon numbers\n
+    The `input_data` will be unpacked into proper lists for the phonons and spins, respectively\n
+    Each of the unpacked objects is a numpy array constructed via the `np.asarray` method\n
+    This function will return a list of excitation energies, evaluated for a particular set of moments of inertia (i.e., the fitting parameters\n
+    """
+
+    phonons, spins = input_data
+    excitation_energies = Excitation_Energy(phonons, spins, I1, I2, I3)
+
+    return excitation_energies

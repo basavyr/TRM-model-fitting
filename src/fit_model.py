@@ -2,6 +2,14 @@ from scipy.optimize import curve_fit
 import numpy as np
 
 
+def Set_Parameter_Bounds():
+    """
+    Return a tuple object containing the intervals of existence for the three parameters
+    """
+    bounds = ([0.5, 0.5, 0.5], [120, 120, 120])
+    return bounds
+
+
 def Fit_Model(model_function, input_data, experimental_data, initial_params, param_bounds):
     """
     Main procedure which generates a set of output parameters that `best` reproduce the experimental data
@@ -55,15 +63,15 @@ def Fitting_Workflow():
     4. Return the best `P_fit_i`
     """
 
-    test_array1 = [12]
-    test_array2 = [13]
-    test_array3 = [14]
+    test_array1 = [22]
+    test_array2 = [27]
+    test_array3 = [47]
 
     for I1_guess in test_array1:
         for I2_guess in test_array2:
             for I3_guess in test_array3:
                 p0_i = [I1_guess, I2_guess, I3_guess]
-                print(p0_i)
+                p_bounds = Set_Parameter_Bounds()
 
 
 def main():
