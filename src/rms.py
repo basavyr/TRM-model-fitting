@@ -16,8 +16,7 @@ def RMS(params):
     th_data = [TRM.Excitation_Energy(exp.PHONONS[idx], exp.SPINS[idx],
                                      params[0], params[1], params[2]) for idx in range(len(exp_data))]
 
-    th_data[0] = TRM.MAXVAL
-
+    # return a fail-safe value for avoiding parameter sets which produce invalid theoretical energies
     maxval_checker = any(e == TRM.MAXVAL for e in th_data)
     if(maxval_checker == True):
         return -TRM.MAXVAL

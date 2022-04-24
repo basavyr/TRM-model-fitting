@@ -1,3 +1,4 @@
+from importlib.resources import path
 from scipy.optimize import curve_fit
 import numpy as np
 
@@ -46,17 +47,19 @@ def Show_Params(params):
     print(params[0], params[1], params[2])
 
 
-def Save_Params(params, path):
+def Save_Params(path, evaluated_models):
     """
     write parameters to file
     """
     with open(path, 'w+') as writer:
-        writer.write(str(params[0]))
-        writer.write("\n")
-        writer.write(str(params[1]))
-        writer.write("\n")
-        writer.write(str(params[2]))
-        writer.write("\n")
+        for model in evaluated_models:
+            params = model[0]
+            rms_value = model[1]
+            writer.write(str(params[0])+" ")
+            writer.write(str(params[1])+" ")
+            writer.write(str(params[2])+" ")
+            writer.write(str(rms_value))
+            writer.write("\n")
 
 
 def Fitting_Workflow():
@@ -69,25 +72,29 @@ def Fitting_Workflow():
     4. Return the best `P_fit_i`
     """
 
-    test_array1 = [10, 12]
-    test_array2 = [1]
-    test_array3 = [3]
-
+    moi_interval = np.arange(1, 121, 1)
     p_bounds = Set_Parameter_Bounds()
 
-    # save each fitted model
+    best_rms = TRM.MAXVAL
+
+    # save the fit procedures which produce good results after each iteration
     evaluated_models = []
-    for I1_guess in test_array1:
-        for I2_guess in test_array2:
-            for I3_guess in test_array3:
+
+    for I1_guess in [1]:
+        for I2_guess in moi_interval:
+            for I3_guess in moi_interval:
                 p0_i = [I1_guess, I2_guess, I3_guess]
                 fitting_parameters = Fit_Model(model_function=TRM.TRM_Model_Energy, input_data=exp.INPUT_DATA,
                                                experimental_data=exp.EXCITATION_ENERGIES, initial_params=p0_i, param_bounds=p_bounds)
-                rms_value = rms.RMS(fitting_parameters)
-                evaluated_models.append((fitting_parameters, rms_value))
+                current_rms = rms.RMS(fitting_parameters)
+                if(current_rms <= best_rms):
+                    evaluated_models.append((fitting_parameters, current_rms))
+                    best_rms = current_rms
 
+    path_file = "results/fitting_workflow_results.dat"
     for model in evaluated_models:
         print(model)
+    Save_Params(path=path_file, evaluated_models=evaluated_models)
 
 
 def main():
