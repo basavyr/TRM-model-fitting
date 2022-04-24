@@ -75,14 +75,19 @@ def Fitting_Workflow():
 
     p_bounds = Set_Parameter_Bounds()
 
+    # save each fitted model
+    evaluated_models = []
     for I1_guess in test_array1:
         for I2_guess in test_array2:
             for I3_guess in test_array3:
                 p0_i = [I1_guess, I2_guess, I3_guess]
                 fitting_parameters = Fit_Model(model_function=TRM.TRM_Model_Energy, input_data=exp.INPUT_DATA,
                                                experimental_data=exp.EXCITATION_ENERGIES, initial_params=p0_i, param_bounds=p_bounds)
-                Show_Params(fitting_parameters)
-                rms.RMS(fitting_parameters)
+                rms_value = rms.RMS(fitting_parameters)
+                evaluated_models.append((fitting_parameters, rms_value))
+
+    for model in evaluated_models:
+        print(model)
 
 
 def main():
