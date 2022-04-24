@@ -2,6 +2,10 @@ from scipy.optimize import curve_fit
 import numpy as np
 
 
+import experimental_data as exp
+import TRM
+
+
 def Set_Parameter_Bounds():
     """
     Return a tuple object containing the intervals of existence for the three parameters
@@ -30,6 +34,7 @@ def Fit_Model(model_function, input_data, experimental_data, initial_params, par
         print('There was an issue within the fitting procedure')
         return -1
     else:
+        fit_parameters = [np.round(p, 3) for p in fit_parameters]
         return fit_parameters
 
 
@@ -63,15 +68,19 @@ def Fitting_Workflow():
     4. Return the best `P_fit_i`
     """
 
-    test_array1 = [22]
-    test_array2 = [27]
-    test_array3 = [47]
+    test_array1 = [10]
+    test_array2 = [1]
+    test_array3 = [3]
+
+    p_bounds = Set_Parameter_Bounds()
 
     for I1_guess in test_array1:
         for I2_guess in test_array2:
             for I3_guess in test_array3:
                 p0_i = [I1_guess, I2_guess, I3_guess]
-                p_bounds = Set_Parameter_Bounds()
+                fitting_parameters = Fit_Model(model_function=TRM.TRM_Model_Energy, input_data=exp.INPUT_DATA,
+                                               experimental_data=exp.EXCITATION_ENERGIES, initial_params=p0_i, param_bounds=p_bounds)
+                Show_Params(fitting_parameters)
 
 
 def main():
