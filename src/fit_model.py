@@ -4,6 +4,7 @@ import numpy as np
 
 import experimental_data as exp
 import TRM
+import rms
 
 
 def Set_Parameter_Bounds():
@@ -68,7 +69,7 @@ def Fitting_Workflow():
     4. Return the best `P_fit_i`
     """
 
-    test_array1 = [10]
+    test_array1 = [10, 12]
     test_array2 = [1]
     test_array3 = [3]
 
@@ -81,6 +82,7 @@ def Fitting_Workflow():
                 fitting_parameters = Fit_Model(model_function=TRM.TRM_Model_Energy, input_data=exp.INPUT_DATA,
                                                experimental_data=exp.EXCITATION_ENERGIES, initial_params=p0_i, param_bounds=p_bounds)
                 Show_Params(fitting_parameters)
+                rms.RMS(fitting_parameters)
 
 
 def main():
